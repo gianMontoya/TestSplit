@@ -3,15 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { SplitFactory } from '@splitsoftware/splitio-react';
+import './index.css';
+import sdkConfig from './sdkConfig';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  //Este componente es el que nos permitirá utilizar Split dentro de la aplicación, debemos pasarle la configuración que realizamos en el sdkConfig
+  <SplitFactory config={sdkConfig} updateOnSdkTimedout={true} >
+    {({ isReady }) => {
+      // isReady nos permite renderizar otro componente mientras el SDK aun no esta listo
+      if (!isReady) return (<div>Cargando SDK ...</div>);
+      return <App />
+    }}
+  </SplitFactory>
+
+
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log);
